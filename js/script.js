@@ -1,4 +1,7 @@
-// Initialize Firebase
+// ============================================
+// FIREBASE CONFIGURATION FOR HOMEPAGE
+// ============================================
+
 const firebaseConfig = {
   apiKey: "AIzaSyDNJAKyOPmnNdwxhO6ptqe1EXE9YSOTmjw",
   authDomain: "monark-ecommerce.firebaseapp.com",
@@ -11,13 +14,15 @@ const firebaseConfig = {
 // Initialize Firebase if not already initialized
 if (typeof firebase !== "undefined" && !firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
-  console.log("Firebase initialized!");
+  console.log("Firebase initialized on homepage!");
 }
 
+let db = null;
+let useFirebase = false;
+
 // ============================================
-// ORIGINAL PRODUCT DATA (kept for backup)
+// ORIGINAL PRODUCT DATA (FALLBACK)
 // ============================================
-const defaultSizes = ["S", "M", "L", "XL"];
 
 const productData = {
   home: {
@@ -60,7 +65,7 @@ const productData = {
   },
   tops: {
     title: "TOPS",
-    desc: "Elevated shirts, polos, hoodies and more. Refined layering pieces.",
+    desc: "Elevated shirts, polos, hoodies and more.",
     products: [
       {
         name: "Classic Oxford Shirt",
@@ -265,70 +270,16 @@ const accessorySubProducts = {
       tag: "bags",
       sizes: ["One Size"],
     },
-    {
-      name: "Canvas Tote Bag",
-      price: 59,
-      oldPrice: 79,
-      img: "https://placehold.co/600x800?text=Tote+Bag",
-      sale: true,
-      tag: "bags",
-      sizes: ["One Size"],
-    },
-    {
-      name: "Messenger Bag",
-      price: 89,
-      oldPrice: 119,
-      img: "https://placehold.co/600x800?text=Messenger",
-      sale: false,
-      tag: "bags",
-      sizes: ["One Size"],
-    },
-    {
-      name: "Mini Crossbody",
-      price: 45,
-      oldPrice: 65,
-      img: "https://placehold.co/600x800?text=Crossbody",
-      sale: true,
-      tag: "bags",
-      sizes: ["One Size"],
-    },
   ],
   socks: [
     {
-      name: "Wool Blend Socks (3pk)",
+      name: "Wool Blend Socks",
       price: 24,
       oldPrice: 35,
-      img: "https://placehold.co/600x800?text=Socks+Pack",
+      img: "https://placehold.co/600x800?text=Socks",
       sale: true,
       tag: "socks",
       sizes: ["S", "M", "L"],
-    },
-    {
-      name: "Cotton Ankle Socks",
-      price: 15,
-      oldPrice: 22,
-      img: "https://placehold.co/600x800?text=Ankle+Socks",
-      sale: false,
-      tag: "socks",
-      sizes: ["S", "M", "L"],
-    },
-    {
-      name: "Crew Length Socks",
-      price: 18,
-      oldPrice: 28,
-      img: "https://placehold.co/600x800?text=Crew+Socks",
-      sale: true,
-      tag: "socks",
-      sizes: ["M", "L"],
-    },
-    {
-      name: "Patterned Dress Socks",
-      price: 22,
-      oldPrice: 32,
-      img: "https://placehold.co/600x800?text=Dress+Socks",
-      sale: false,
-      tag: "socks",
-      sizes: ["M", "L", "XL"],
     },
   ],
   glasses: [
@@ -341,46 +292,10 @@ const accessorySubProducts = {
       tag: "glasses",
       sizes: ["One Size"],
     },
-    {
-      name: "Round Optic Glasses",
-      price: 79,
-      oldPrice: 109,
-      img: "https://placehold.co/600x800?text=Round+Glasses",
-      sale: false,
-      tag: "glasses",
-      sizes: ["One Size"],
-    },
-    {
-      name: "Square Frame",
-      price: 89,
-      oldPrice: 119,
-      img: "https://placehold.co/600x800?text=Square+Frame",
-      sale: true,
-      tag: "glasses",
-      sizes: ["One Size"],
-    },
-    {
-      name: "Retro Sunglasses",
-      price: 69,
-      oldPrice: 99,
-      img: "https://placehold.co/600x800?text=Retro",
-      sale: true,
-      tag: "glasses",
-      sizes: ["One Size"],
-    },
   ],
   ties: [
     {
-      name: "Silk Pocket Square",
-      price: 29,
-      oldPrice: 45,
-      img: "https://placehold.co/600x800?text=Pocket+Square",
-      sale: false,
-      tag: "ties",
-      sizes: ["One Size"],
-    },
-    {
-      name: "Classic Silk Tie",
+      name: "Silk Tie",
       price: 39,
       oldPrice: 59,
       img: "https://placehold.co/600x800?text=Silk+Tie",
@@ -388,58 +303,13 @@ const accessorySubProducts = {
       tag: "ties",
       sizes: ["One Size"],
     },
-    {
-      name: "Wool Knit Tie",
-      price: 34,
-      oldPrice: 49,
-      img: "https://placehold.co/600x800?text=Knit+Tie",
-      sale: false,
-      tag: "ties",
-      sizes: ["One Size"],
-    },
-    {
-      name: "Bow Tie Set",
-      price: 32,
-      oldPrice: 48,
-      img: "https://placehold.co/600x800?text=Bow+Tie",
-      sale: true,
-      tag: "ties",
-      sizes: ["One Size"],
-    },
   ],
   wallets: [
     {
-      name: "Leather Cardholder",
+      name: "Leather Wallet",
       price: 45,
       oldPrice: 65,
-      img: "https://placehold.co/600x800?text=Cardholder",
-      sale: true,
-      tag: "wallets",
-      sizes: ["One Size"],
-    },
-    {
-      name: "Bifold Wallet",
-      price: 59,
-      oldPrice: 85,
-      img: "https://placehold.co/600x800?text=Bifold",
-      sale: false,
-      tag: "wallets",
-      sizes: ["One Size"],
-    },
-    {
-      name: "Money Clip Wallet",
-      price: 39,
-      oldPrice: 55,
-      img: "https://placehold.co/600x800?text=Clip+Wallet",
-      sale: true,
-      tag: "wallets",
-      sizes: ["One Size"],
-    },
-    {
-      name: "Slim RFID Wallet",
-      price: 49,
-      oldPrice: 69,
-      img: "https://placehold.co/600x800?text=RFID+Wallet",
+      img: "https://placehold.co/600x800?text=Wallet",
       sale: true,
       tag: "wallets",
       sizes: ["One Size"],
@@ -447,37 +317,10 @@ const accessorySubProducts = {
   ],
   belts: [
     {
-      name: "Minimalist Belt",
+      name: "Leather Belt",
       price: 49,
       oldPrice: 69,
       img: "https://placehold.co/600x800?text=Belt",
-      sale: false,
-      tag: "belts",
-      sizes: ["S", "M", "L", "XL"],
-    },
-    {
-      name: "Reversible Leather Belt",
-      price: 59,
-      oldPrice: 79,
-      img: "https://placehold.co/600x800?text=Reversible+Belt",
-      sale: true,
-      tag: "belts",
-      sizes: ["M", "L", "XL"],
-    },
-    {
-      name: "Canvas Web Belt",
-      price: 29,
-      oldPrice: 45,
-      img: "https://placehold.co/600x800?text=Canvas+Belt",
-      sale: true,
-      tag: "belts",
-      sizes: ["S", "M", "L"],
-    },
-    {
-      name: "Metal Buckle Belt",
-      price: 39,
-      oldPrice: 59,
-      img: "https://placehold.co/600x800?text=Metal+Belt",
       sale: false,
       tag: "belts",
       sizes: ["S", "M", "L", "XL"],
@@ -495,12 +338,9 @@ const subcatMap = {
 };
 
 // ============================================
-// FIREBASE INTEGRATION
+// FIREBASE PRODUCT LOADING
 // ============================================
-let useFirebase = false;
-let db = null;
 
-// Check if Firebase is available
 function checkFirebase() {
   if (typeof firebase !== "undefined" && firebase.apps.length) {
     useFirebase = true;
@@ -515,22 +355,18 @@ function checkFirebase() {
   }
 }
 
-// Load products from Firebase
 async function loadProductsFromFirebase(category, subFilter) {
   if (!db) {
     renderPage(category, subFilter);
     return;
   }
 
-  // Show loading
   document.getElementById("productsGrid").innerHTML = `
-    <div class="col-12 text-center py-5">
-      <div class="spinner-border text-warning" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-      <p class="mt-3">Loading products from database...</p>
-    </div>
-  `;
+        <div class="col-12 text-center py-5">
+            <div class="spinner-border text-warning" role="status"></div>
+            <p class="mt-3">Loading products...</p>
+        </div>
+    `;
 
   try {
     let query = db.collection("products");
@@ -548,16 +384,13 @@ async function loadProductsFromFirebase(category, subFilter) {
     const snapshot = await query.get();
 
     if (snapshot.empty) {
-      // Fallback to local data
       console.log("No products in Firebase, using local data");
       renderPage(category, subFilter);
       return;
     }
 
-    // Update headers
     updateHeaders(category, subFilter);
 
-    // Render products from Firebase
     let html = "";
     snapshot.forEach((doc) => {
       const p = doc.data();
@@ -575,24 +408,25 @@ async function loadProductsFromFirebase(category, subFilter) {
       }
 
       html += `
-        <div class="col">
-          <div class="product-card h-100" data-id="${doc.id}">
-            <img src="${p.imageUrl || "https://placehold.co/600x800?text=MONARK"}" class="card-img-top" alt="${p.name}">
-            <div class="card-body">
-              ${hasSale ? `<div class="mb-2"><span class="badge-sale">-${salePercent}%</span></div>` : '<div class="mb-2">&nbsp;</div>'}
-              <h6 class="card-title fw-semibold">${p.name}</h6>
-              <div class="mt-1">
-                ${p.oldPrice ? `<span class="price-old">$${p.oldPrice}</span>` : ""}
-                <span class="price-new">$${p.price}</span>
-              </div>
-              ${sizeHtml}
-            </div>
-          </div>
-        </div>
-      `;
+                <div class="col">
+                    <div class="product-card h-100" data-id="${doc.id}">
+                        <img src="${p.imageUrl || "https://placehold.co/600x800?text=MONARK"}" class="card-img-top" alt="${p.name}">
+                        <div class="card-body">
+                            ${hasSale ? `<div class="mb-2"><span class="badge-sale">-${salePercent}%</span></div>` : '<div class="mb-2">&nbsp;</div>'}
+                            <h6 class="card-title fw-semibold">${p.name}</h6>
+                            <div class="mt-1">
+                                ${p.oldPrice ? `<span class="price-old">$${p.oldPrice}</span>` : ""}
+                                <span class="price-new">$${p.price}</span>
+                            </div>
+                            ${sizeHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
     });
 
     document.getElementById("productsGrid").innerHTML = html;
+
     // Make products clickable
     document.querySelectorAll(".product-card").forEach((card) => {
       card.addEventListener("click", () => {
@@ -606,17 +440,13 @@ async function loadProductsFromFirebase(category, subFilter) {
   }
 }
 
-// Update headers
 function updateHeaders(category, subFilter) {
   const titles = {
     home: {
       title: "NEW ARRIVALS",
-      desc: "Discover the latest styles, fresh from the runway. Elevated essentials for every look.",
+      desc: "Discover the latest styles, fresh from the runway.",
     },
-    tops: {
-      title: "TOPS",
-      desc: "Elevated shirts, polos, hoodies and more. Refined layering pieces.",
-    },
+    tops: { title: "TOPS", desc: "Elevated shirts, polos, hoodies and more." },
     bottoms: {
       title: "BOTTOMS",
       desc: "Tailored trousers, premium denim and relaxed joggers.",
@@ -649,10 +479,10 @@ function updateHeaders(category, subFilter) {
 }
 
 // ============================================
-// ORIGINAL FUNCTIONS (kept intact)
+// ORIGINAL RENDER FUNCTION (FALLBACK)
 // ============================================
+
 function renderPage(category, subFilter = null) {
-  // Update active nav
   document
     .querySelectorAll(".nav-link")
     .forEach((link) => link.classList.remove("active-nav"));
@@ -665,42 +495,26 @@ function renderPage(category, subFilter = null) {
     }
   });
 
-  if (category === "accessories") {
-    const accLink = document.querySelector("#accessoriesLink");
-    if (accLink) accLink.classList.add("active-nav");
-  } else {
-    const accLink = document.querySelector("#accessoriesLink");
-    if (accLink) accLink.classList.remove("active-nav");
-  }
-
   let title = "",
     desc = "";
   let productsArray = [];
 
   if (category === "accessories" && subFilter && subcatMap[subFilter]) {
     const filterTag = subcatMap[subFilter];
-    if (accessorySubProducts[filterTag]) {
-      productsArray = [...accessorySubProducts[filterTag]];
-    } else {
-      productsArray = productData.accessories.products.filter(
-        (p) => p.tag === filterTag,
-      );
-    }
+    productsArray = accessorySubProducts[filterTag] || [];
     const subDisplay = subFilter.charAt(0).toUpperCase() + subFilter.slice(1);
     title = `${subDisplay} | Accessories`;
-    desc = `Explore our curated ${subDisplay} collection — premium materials and functional design.`;
+    desc = `Explore our curated ${subDisplay} collection.`;
   } else if (category === "accessories") {
-    productsArray = [...productData.accessories.products.slice(0, 4)];
+    productsArray = [...productData.accessories.products];
     title = productData.accessories.title;
     desc = productData.accessories.desc;
   } else {
     const dataSource = productData[category] || productData.home;
-    productsArray = [...dataSource.products.slice(0, 4)];
+    productsArray = [...dataSource.products];
     title = dataSource.title;
     desc = dataSource.desc;
   }
-
-  if (productsArray.length > 4) productsArray = productsArray.slice(0, 4);
 
   document.getElementById("dynamicHeading").innerText = title;
   document.getElementById("dynamicDesc").innerText = desc;
@@ -713,7 +527,7 @@ function renderPage(category, subFilter = null) {
   }
 
   let html = "";
-  productsArray.forEach((prod) => {
+  productsArray.forEach((prod, index) => {
     const hasSale =
       prod.sale === true || (prod.oldPrice && prod.oldPrice > prod.price);
     const salePercent =
@@ -731,24 +545,26 @@ function renderPage(category, subFilter = null) {
     }
 
     html += `
-      <div class="col">
-        <div class="product-card h-100" data-id="${prod.name.replace(/\s/g, "-")}">
-          <img src="${prod.img}" class="card-img-top" alt="${prod.name}">
-          <div class="card-body">
-            ${hasSale ? `<div class="mb-2"><span class="badge-sale">-${salePercent}%</span></div>` : '<div class="mb-2">&nbsp;</div>'}
-            <h6 class="card-title fw-semibold">${prod.name}</h6>
-            <div class="mt-1">
-              ${prod.oldPrice ? `<span class="price-old">$${prod.oldPrice}</span>` : ""}
-              <span class="price-new">$${prod.price}</span>
+            <div class="col">
+                <div class="product-card h-100" data-id="local-${index}">
+                    <img src="${prod.img}" class="card-img-top" alt="${prod.name}">
+                    <div class="card-body">
+                        ${hasSale ? `<div class="mb-2"><span class="badge-sale">-${salePercent}%</span></div>` : '<div class="mb-2">&nbsp;</div>'}
+                        <h6 class="card-title fw-semibold">${prod.name}</h6>
+                        <div class="mt-1">
+                            ${prod.oldPrice ? `<span class="price-old">$${prod.oldPrice}</span>` : ""}
+                            <span class="price-new">$${prod.price}</span>
+                        </div>
+                        ${sizeHtml}
+                    </div>
+                </div>
             </div>
-            ${sizeHtml}
-          </div>
-        </div>
-      </div>
-    `;
+        `;
   });
+
   grid.innerHTML = html;
-  // Make products clickable
+
+  // Make products clickable (local fallback)
   document.querySelectorAll(".product-card").forEach((card) => {
     card.addEventListener("click", () => {
       const id = card.getAttribute("data-id");
@@ -756,6 +572,77 @@ function renderPage(category, subFilter = null) {
     });
   });
 }
+
+// Firebase add to cart (still needed for product-details page)
+async function addToCart(productId) {
+  if (!db) return;
+
+  try {
+    const doc = await db.collection("products").doc(productId).get();
+    if (!doc.exists) return;
+
+    const product = doc.data();
+    let cart = localStorage.getItem("monark_cart");
+    cart = cart ? JSON.parse(cart) : [];
+
+    const existing = cart.find((item) => item.id === productId);
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({
+        id: productId,
+        name: product.name,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        size: product.sizes?.[0] || "M",
+        quantity: 1,
+      });
+    }
+
+    localStorage.setItem("monark_cart", JSON.stringify(cart));
+    updateCartCount();
+    showToastLocal(`${product.name} added to cart!`);
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+  }
+}
+
+function updateCartCount() {
+  const cart = localStorage.getItem("monark_cart");
+  let count = 0;
+
+  if (cart) {
+    const items = JSON.parse(cart);
+    count = items.reduce((total, item) => total + item.quantity, 0);
+  }
+
+  const cartIcon = document.getElementById("cartIcon");
+  if (cartIcon) {
+    const existing = cartIcon.querySelector(".cart-badge");
+    if (existing) existing.remove();
+
+    if (count > 0) {
+      const badge = document.createElement("span");
+      badge.className = "cart-badge";
+      badge.textContent = count;
+      badge.style.cssText =
+        "position:absolute;background:#b8860b;color:white;border-radius:50%;font-size:10px;padding:2px 6px;margin-left:8px;margin-top:-8px;";
+      cartIcon.style.position = "relative";
+      cartIcon.appendChild(badge);
+    }
+  }
+}
+
+function showToastLocal(message) {
+  const toast = document.createElement("div");
+  toast.innerHTML = `<div style="position:fixed;bottom:20px;right:20px;background:#28a745;color:white;padding:12px 24px;border-radius:8px;z-index:9999;">${message}</div>`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2000);
+}
+
+// ============================================
+// NAVIGATION EVENTS
+// ============================================
 
 function initEvents() {
   const navLinks = document.querySelectorAll("[data-category]");
@@ -771,6 +658,11 @@ function initEvents() {
         if (cat === "accessories") renderPage("accessories", null);
         else renderPage(cat, null);
       }
+
+      document
+        .querySelectorAll(".nav-link")
+        .forEach((l) => l.classList.remove("active-nav"));
+      link.classList.add("active-nav");
     });
   });
 
@@ -792,28 +684,18 @@ function initEvents() {
     link.addEventListener("click", (e) => {
       e.preventDefault();
       const cat = link.getAttribute("data-category");
-      if (useFirebase) {
-        loadProductsFromFirebase(cat, null);
-      } else {
-        if (cat) renderPage(cat, null);
-      }
+      if (useFirebase) loadProductsFromFirebase(cat, null);
+      else renderPage(cat, null);
     });
   });
 
-  document.getElementById("homeLinkMain")?.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (useFirebase) loadProductsFromFirebase("home", null);
-    else renderPage("home", null);
+  document.getElementById("cartIcon")?.addEventListener("click", () => {
+    window.location.href = "cart.html";
   });
 
-  document
-    .getElementById("searchIcon")
-    ?.addEventListener("click", () =>
-      alert("Search functionality coming soon"),
-    );
-  document
-    .getElementById("cartIcon")
-    ?.addEventListener("click", () => alert("Your cart is empty"));
+  document.getElementById("searchIcon")?.addEventListener("click", () => {
+    alert("Search functionality coming soon!");
+  });
 }
 
 // Bootstrap hover dropdown
@@ -832,12 +714,9 @@ if (dropdownElement) {
   });
 }
 
-// ============================================
-// INITIALIZATION
-// ============================================
-// Wait for page to load
+// Initialize
 document.addEventListener("DOMContentLoaded", function () {
   initEvents();
-  // Try Firebase first, fallback to local
+  updateCartCount();
   checkFirebase();
 });
