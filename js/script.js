@@ -1,4 +1,22 @@
-// Product Data
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDNJAKyOPmnNdwxhO6ptqe1EXE9YSOTmjw",
+  authDomain: "monark-ecommerce.firebaseapp.com",
+  projectId: "monark-ecommerce",
+  storageBucket: "monark-ecommerce.firebasestorage.app",
+  messagingSenderId: "721924539836",
+  appId: "1:721924539836:web:5dfe03a4faa903173257b9",
+};
+
+// Initialize Firebase if not already initialized
+if (typeof firebase !== "undefined" && !firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+  console.log("Firebase initialized!");
+}
+
+// ============================================
+// ORIGINAL PRODUCT DATA (kept for backup)
+// ============================================
 const defaultSizes = ["S", "M", "L", "XL"];
 
 const productData = {
@@ -476,6 +494,163 @@ const subcatMap = {
   belts: "belts",
 };
 
+// ============================================
+// FIREBASE INTEGRATION
+// ============================================
+let useFirebase = false;
+let db = null;
+
+// Check if Firebase is available
+function checkFirebase() {
+  if (typeof firebase !== "undefined" && firebase.apps.length) {
+    useFirebase = true;
+    db = firebase.firestore();
+    console.log("✅ Firebase connected! Loading products from database...");
+    loadProductsFromFirebase("home", null);
+    return true;
+  } else {
+    console.log("⚠️ Firebase not available. Using local data...");
+    renderPage("home", null);
+    return false;
+  }
+}
+
+// Load products from Firebase
+async function loadProductsFromFirebase(category, subFilter) {
+  if (!db) {
+    renderPage(category, subFilter);
+    return;
+  }
+
+  // Show loading
+  document.getElementById("productsGrid").innerHTML = `
+    <div class="col-12 text-center py-5">
+      <div class="spinner-border text-warning" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-3">Loading products from database...</p>
+    </div>
+  `;
+
+  try {
+    let query = db.collection("products");
+
+    if (category === "accessories" && subFilter) {
+      query = query
+        .where("category", "==", "accessories")
+        .where("subcategory", "==", subFilter);
+    } else if (category === "accessories") {
+      query = query.where("category", "==", "accessories");
+    } else if (category !== "home") {
+      query = query.where("category", "==", category);
+    }
+
+    const snapshot = await query.get();
+
+    if (snapshot.empty) {
+      // Fallback to local data
+      console.log("No products in Firebase, using local data");
+      renderPage(category, subFilter);
+      return;
+    }
+
+    // Update headers
+    updateHeaders(category, subFilter);
+
+    // Render products from Firebase
+    let html = "";
+    snapshot.forEach((doc) => {
+      const p = doc.data();
+      const hasSale = p.sale === true;
+      const salePercent =
+        hasSale && p.oldPrice
+          ? Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100)
+          : 0;
+
+      let sizeHtml = "";
+      if (p.sizes && p.sizes.length > 0) {
+        sizeHtml = `<div class="mt-2">${p.sizes.map((sz) => `<span class="size-badge">${sz}</span>`).join("")}</div>`;
+      } else {
+        sizeHtml = `<div class="mt-2"><span class="size-badge">S</span><span class="size-badge">M</span><span class="size-badge">L</span><span class="size-badge">XL</span></div>`;
+      }
+
+      html += `
+        <div class="col">
+          <div class="product-card h-100" data-id="${doc.id}">
+            <img src="${p.imageUrl || "https://placehold.co/600x800?text=MONARK"}" class="card-img-top" alt="${p.name}">
+            <div class="card-body">
+              ${hasSale ? `<div class="mb-2"><span class="badge-sale">-${salePercent}%</span></div>` : '<div class="mb-2">&nbsp;</div>'}
+              <h6 class="card-title fw-semibold">${p.name}</h6>
+              <div class="mt-1">
+                ${p.oldPrice ? `<span class="price-old">$${p.oldPrice}</span>` : ""}
+                <span class="price-new">$${p.price}</span>
+              </div>
+              ${sizeHtml}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    document.getElementById("productsGrid").innerHTML = html;
+    // Make products clickable
+    document.querySelectorAll(".product-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        const id = card.getAttribute("data-id");
+        window.location.href = `product-details.html?id=${id}`;
+      });
+    });
+  } catch (error) {
+    console.error("Firebase error:", error);
+    renderPage(category, subFilter);
+  }
+}
+
+// Update headers
+function updateHeaders(category, subFilter) {
+  const titles = {
+    home: {
+      title: "NEW ARRIVALS",
+      desc: "Discover the latest styles, fresh from the runway. Elevated essentials for every look.",
+    },
+    tops: {
+      title: "TOPS",
+      desc: "Elevated shirts, polos, hoodies and more. Refined layering pieces.",
+    },
+    bottoms: {
+      title: "BOTTOMS",
+      desc: "Tailored trousers, premium denim and relaxed joggers.",
+    },
+    formalwear: {
+      title: "FORMAL WEAR",
+      desc: "Sharp suits, dress shirts, and refined tailoring.",
+    },
+    easywear: {
+      title: "EASY WEAR",
+      desc: "Comfort focused, elevated lounge & soft essentials.",
+    },
+    accessories: {
+      title: "ACCESSORIES",
+      desc: "Complete your look with refined details.",
+    },
+  };
+
+  let title = titles[category]?.title || "SHOP";
+  let desc = titles[category]?.desc || "Explore our collection.";
+
+  if (category === "accessories" && subFilter) {
+    const subDisplay = subFilter.charAt(0).toUpperCase() + subFilter.slice(1);
+    title = `${subDisplay} | Accessories`;
+    desc = `Explore our curated ${subDisplay} collection.`;
+  }
+
+  document.getElementById("dynamicHeading").innerText = title;
+  document.getElementById("dynamicDesc").innerText = desc;
+}
+
+// ============================================
+// ORIGINAL FUNCTIONS (kept intact)
+// ============================================
 function renderPage(category, subFilter = null) {
   // Update active nav
   document
@@ -556,23 +731,30 @@ function renderPage(category, subFilter = null) {
     }
 
     html += `
-                <div class="col">
-                    <div class="product-card h-100">
-                        <img src="${prod.img}" class="card-img-top" alt="${prod.name}">
-                        <div class="card-body">
-                            ${hasSale ? `<div class="mb-2"><span class="badge-sale">-${salePercent}%</span></div>` : '<div class="mb-2">&nbsp;</div>'}
-                            <h6 class="card-title fw-semibold">${prod.name}</h6>
-                            <div class="mt-1">
-                                ${prod.oldPrice ? `<span class="price-old">$${prod.oldPrice}</span>` : ""}
-                                <span class="price-new">$${prod.price}</span>
-                            </div>
-                            ${sizeHtml}
-                        </div>
-                    </div>
-                </div>
-            `;
+      <div class="col">
+        <div class="product-card h-100" data-id="${prod.name.replace(/\s/g, "-")}">
+          <img src="${prod.img}" class="card-img-top" alt="${prod.name}">
+          <div class="card-body">
+            ${hasSale ? `<div class="mb-2"><span class="badge-sale">-${salePercent}%</span></div>` : '<div class="mb-2">&nbsp;</div>'}
+            <h6 class="card-title fw-semibold">${prod.name}</h6>
+            <div class="mt-1">
+              ${prod.oldPrice ? `<span class="price-old">$${prod.oldPrice}</span>` : ""}
+              <span class="price-new">$${prod.price}</span>
+            </div>
+            ${sizeHtml}
+          </div>
+        </div>
+      </div>
+    `;
   });
   grid.innerHTML = html;
+  // Make products clickable
+  document.querySelectorAll(".product-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      const id = card.getAttribute("data-id");
+      window.location.href = `product-details.html?id=${id}`;
+    });
+  });
 }
 
 function initEvents() {
@@ -581,8 +763,14 @@ function initEvents() {
     link.addEventListener("click", (e) => {
       e.preventDefault();
       const cat = link.getAttribute("data-category");
-      if (cat === "accessories") renderPage("accessories", null);
-      else renderPage(cat, null);
+      if (useFirebase) {
+        if (cat === "accessories")
+          loadProductsFromFirebase("accessories", null);
+        else loadProductsFromFirebase(cat, null);
+      } else {
+        if (cat === "accessories") renderPage("accessories", null);
+        else renderPage(cat, null);
+      }
     });
   });
 
@@ -591,7 +779,11 @@ function initEvents() {
     item.addEventListener("click", (e) => {
       e.preventDefault();
       const subcat = item.getAttribute("data-subcat");
-      if (subcat) renderPage("accessories", subcat);
+      if (useFirebase) {
+        loadProductsFromFirebase("accessories", subcat);
+      } else {
+        if (subcat) renderPage("accessories", subcat);
+      }
     });
   });
 
@@ -600,13 +792,18 @@ function initEvents() {
     link.addEventListener("click", (e) => {
       e.preventDefault();
       const cat = link.getAttribute("data-category");
-      if (cat) renderPage(cat, null);
+      if (useFirebase) {
+        loadProductsFromFirebase(cat, null);
+      } else {
+        if (cat) renderPage(cat, null);
+      }
     });
   });
 
   document.getElementById("homeLinkMain")?.addEventListener("click", (e) => {
     e.preventDefault();
-    renderPage("home", null);
+    if (useFirebase) loadProductsFromFirebase("home", null);
+    else renderPage("home", null);
   });
 
   document
@@ -635,5 +832,12 @@ if (dropdownElement) {
   });
 }
 
-renderPage("home", null);
-initEvents();
+// ============================================
+// INITIALIZATION
+// ============================================
+// Wait for page to load
+document.addEventListener("DOMContentLoaded", function () {
+  initEvents();
+  // Try Firebase first, fallback to local
+  checkFirebase();
+});

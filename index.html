@@ -8,6 +8,7 @@
     />
     <link rel="shortcut icon" href="logo.png" type="image/x-icon" />
     <title>MONARK | Premium Fashion</title>
+
     <!-- Bootstrap 5 CSS + Icons + Google Fonts -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
@@ -17,7 +18,11 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   </head>
   <body>
     <!-- HEADER -->
@@ -27,13 +32,7 @@
       >
         <div class="row align-items-center">
           <div class="col-6">
-            <img src="logo_white.webp" alt="" />
-            <!-- <a
-              href="#"
-              class="navbar-brand text-decoration-none"
-              id="homeLinkMain"
-              ><img src="logo_white.webp" alt=""
-            /></a> -->
+            <img src="logo_white.webp" alt="MONARK Logo" style="height: 40px" />
           </div>
           <div
             class="col-6 d-flex justify-content-end align-items-center gap-4"
@@ -78,25 +77,16 @@
                   >EASY WEAR</a
                 >
               </li>
-              <li
-                class="nav-item dropdown position-relative"
-                id="accessoriesDropdown"
-              >
+              <li class="nav-item dropdown" id="accessoriesDropdown">
                 <a
                   class="nav-link dropdown-toggle"
                   href="#"
                   id="accessoriesLink"
                   role="button"
                   data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                  data-category="accessories"
+                  >ACCESSORIES</a
                 >
-                  ACCESSORIES
-                </a>
-                <ul
-                  class="dropdown-menu dropdown-menu-custom"
-                  aria-labelledby="accessoriesLink"
-                >
+                <ul class="dropdown-menu dropdown-menu-custom">
                   <li>
                     <a class="dropdown-item-custom" href="#" data-subcat="bags"
                       >Bags</a
@@ -141,38 +131,29 @@
       </nav>
     </header>
 
-    <!-- Main Content - FILTER BAR REMOVED -->
+    <!-- Main Content -->
     <main class="container my-4 my-lg-5 products-container">
-      <!-- Dynamic Category Header -->
       <div id="categoryTitle" class="category-hero">
         <h2 class="display-6 fw-semibold" id="dynamicHeading">NEW ARRIVALS</h2>
         <p id="dynamicDesc" class="text-muted mb-0">
-          Discover the latest styles, fresh from the runway. Elevated essentials
-          for every look.
+          Discover the latest styles, fresh from the runway.
         </p>
       </div>
 
-      <!-- Products Grid -->
       <div
         id="productsGrid"
         class="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4"
       >
-        <!-- Products injected dynamically -->
+        <!-- Products will appear here -->
       </div>
     </main>
 
-    <footer class="pt-5 pb-4">
+    <footer class="pt-5 pb-4 bg-dark text-white">
       <div class="container">
         <div class="row gy-4">
           <div class="col-md-4">
             <h5 class="text-white mb-3">MONARK</h5>
-            <p class="small">
-              Timeless craftsmanship meets modern comfort. Designed for the
-              discerning.
-            </p>
-            <p class="small mt-2">
-              <i class="fas fa-globe me-2"></i> https://monark.com.pk
-            </p>
+            <p class="small">Timeless craftsmanship meets modern comfort.</p>
           </div>
           <div class="col-md-2 col-6">
             <h6 class="text-white-50">SHOP</h6>
@@ -180,7 +161,7 @@
               <li>
                 <a
                   href="#"
-                  class="text-white-50 text-decoration-none footer-link"
+                  class="text-white-50 text-decoration-none"
                   data-category="tops"
                   >Tops</a
                 >
@@ -188,7 +169,7 @@
               <li>
                 <a
                   href="#"
-                  class="text-white-50 text-decoration-none footer-link"
+                  class="text-white-50 text-decoration-none"
                   data-category="bottoms"
                   >Bottoms</a
                 >
@@ -196,7 +177,7 @@
               <li>
                 <a
                   href="#"
-                  class="text-white-50 text-decoration-none footer-link"
+                  class="text-white-50 text-decoration-none"
                   data-category="formalwear"
                   >Formal Wear</a
                 >
@@ -239,10 +220,7 @@
         </div>
       </div>
     </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/script.js">
-      
-    </script>
+    <script src="js/script.js"></script>
   </body>
 </html>
