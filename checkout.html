@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <title>MONARK | Checkout</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    
+    <style>
+        .checkout-summary {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 25px;
+            position: sticky;
+            top: 100px;
+        }
+        .order-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .order-item-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .order-item-details {
+            flex: 1;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #b8860b;
+            box-shadow: 0 0 0 0.2rem rgba(184, 134, 11, 0.25);
+        }
+        .breadcrumb-custom {
+            background: transparent;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container-fluid container-fluid-custom px-4 px-lg-5 py-3 border-bottom bg-white">
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <a href="index.html">
+                        <img src="logo_white.webp" alt="MONARK Logo" style="height: 40px" />
+                    </a>
+                </div>
+                <div class="col-6 d-flex justify-content-end align-items-center gap-4">
+                    <i class="fas fa-search fs-5 nav-icon" id="searchIcon"></i>
+                    <i class="fas fa-shopping-bag fs-5 nav-icon" id="cartIcon" style="position: relative;"></i>
+                </div>
+            </div>
+        </div>
+
+        <nav class="navbar navbar-expand-lg bg-white border-top border-bottom py-2 sticky-top shadow-sm">
+            <div class="container-fluid container-fluid-custom px-4 px-lg-5">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-2">
+                        <li class="nav-item"><a class="nav-link" href="index.html">NEW IN</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html">TOPS</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html">BOTTOMS</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html">FORMAL WEAR</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html">EASY WEAR</a></li>
+                        <li class="nav-item dropdown" id="accessoriesDropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="accessoriesLink" role="button" data-bs-toggle="dropdown">ACCESSORIES</a>
+                            <ul class="dropdown-menu dropdown-menu-custom">
+                                <li><a class="dropdown-item-custom" href="index.html">Bags</a></li>
+                                <li><a class="dropdown-item-custom" href="index.html">Socks</a></li>
+                                <li><a class="dropdown-item-custom" href="index.html">Glasses</a></li>
+                                <li><a class="dropdown-item-custom" href="index.html">Ties</a></li>
+                                <li><a class="dropdown-item-custom" href="index.html">Wallets</a></li>
+                                <li><a class="dropdown-item-custom" href="index.html">Belts</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <div class="breadcrumb-custom">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="cart.html">Cart</a></li>
+                    <li class="breadcrumb-item active">Checkout</li>
+                </ol>
+            </nav>
+        </div>
+
+        <h1 class="display-6 fw-semibold mb-4">Checkout</h1>
+
+        <div class="row">
+            <!-- Checkout Form -->
+            <div class="col-lg-7">
+                <div class="dashboard-card">
+                    <h5 class="mb-4"><i class="fas fa-user me-2"></i>Shipping Information</h5>
+                    
+                    <form id="checkoutForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name *</label>
+                                <input type="text" class="form-control" id="firstName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name *</label>
+                                <input type="text" class="form-control" id="lastName" required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Phone Number *</label>
+                                <input type="tel" class="form-control" id="phone" placeholder="+92 XXX XXXXXXX" required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Address *</label>
+                                <input type="text" class="form-control" id="address" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">City *</label>
+                                <input type="text" class="form-control" id="city" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Postal Code</label>
+                                <input type="text" class="form-control" id="postalCode">
+                            </div>
+                        </div>
+
+                        <h5 class="mt-4 mb-3"><i class="fas fa-credit-card me-2"></i>Payment Method</h5>
+                        <div class="mb-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="cashOnDelivery" value="cash" checked>
+                                <label class="form-check-label" for="cashOnDelivery">
+                                    Cash on Delivery (COD)
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="bank">
+                                <label class="form-check-label" for="bankTransfer">
+                                    Bank Transfer (Coming Soon)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info mt-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            You will receive an order confirmation email after placing your order.
+                        </div>
+
+                        <div class="d-flex gap-3 mt-4">
+                            <a href="cart.html" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i> Back to Cart
+                            </a>
+                            <button type="submit" class="btn btn-dark" id="placeOrderBtn">
+                                <i class="fas fa-check-circle me-2"></i> Place Order
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-5">
+                <div class="checkout-summary">
+                    <h5 class="mb-3">Your Order</h5>
+                    <div id="orderItemsList">
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-warning spinner-border-sm"></div>
+                            <p class="mt-2 small">Loading cart...</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal</span>
+                        <span id="summarySubtotal">$0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping</span>
+                        <span>Free</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <strong>Total</strong>
+                        <strong id="summaryTotal">$0.00</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="pt-5 pb-4 bg-dark text-white mt-5">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <h5 class="text-white mb-3">MONARK</h5>
+                    <p class="small">Timeless craftsmanship meets modern comfort.</p>
+                </div>
+                <div class="col-md-2 col-6">
+                    <h6 class="text-white-50">SHOP</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="index.html" class="text-white-50 text-decoration-none">Tops</a></li>
+                        <li><a href="index.html" class="text-white-50 text-decoration-none">Bottoms</a></li>
+                        <li><a href="index.html" class="text-white-50 text-decoration-none">Formal Wear</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 col-6">
+                    <h6 class="text-white-50">SUPPORT</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="#" class="text-white-50 text-decoration-none">Contact</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Returns</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Size Guide</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="text-white-50">FOLLOW US</h6>
+                    <div class="fs-5">
+                        <i class="fab fa-instagram me-3 text-white-50"></i>
+                        <i class="fab fa-facebook me-3 text-white-50"></i>
+                        <i class="fab fa-twitter text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="border-top border-secondary mt-4 pt-3 text-center small text-white-50">
+                © 2025 MONARK — Premium essentials. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/checkout.js"></script>
+</body>
+</html>

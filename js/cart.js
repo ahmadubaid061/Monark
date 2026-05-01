@@ -183,3 +183,13 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// proceed to  checkout
+document.getElementById("checkoutBtn")?.addEventListener("click", () => {
+  const cart = localStorage.getItem("monark_cart");
+  if (!cart || JSON.parse(cart).length === 0) {
+    alert("Your cart is empty!");
+  } else {
+    window.location.href = "checkout.html";
+  }
+});
