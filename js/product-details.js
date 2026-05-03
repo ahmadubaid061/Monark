@@ -116,8 +116,8 @@ function displayProduct(product) {
             <h1 class="display-6 fw-semibold">${product.name}</h1>
             
             <div class="mt-3">
-                ${product.oldPrice ? `<span class="price-old fs-4">$${product.oldPrice}</span>` : ""}
-                <span class="price-new fs-2 fw-bold">$${product.price}</span>
+                ${product.oldPrice ? `<span class="price-old fs-4">Rs ${product.oldPrice}</span>` : ""}
+                <span class="price-new fs-2 fw-bold">Rs ${product.price}</span>
             </div>
             
             <div class="mt-4">
@@ -242,7 +242,7 @@ async function loadRelatedProducts(category) {
                             ${hasSale ? `<div class="mb-2"><span class="badge-sale">Sale</span></div>` : '<div class="mb-2">&nbsp;</div>'}
                             <h6 class="card-title fw-semibold">${p.name}</h6>
                             <div class="mt-1">
-                                <span class="price-new">$${p.price}</span>
+                                <span class="price-new">Rs ${p.price}</span>
                             </div>
                         </div>
                     </div>

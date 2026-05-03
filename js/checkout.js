@@ -58,17 +58,18 @@ function displayOrderSummary() {
                 <div class="order-item-details">
                     <div class="fw-semibold">${item.name}</div>
                     <div class="small text-muted">Size: ${item.size || "M"} | Qty: ${item.quantity}</div>
-                    <div class="small">$${item.price} each</div>
+                    <div class="small">Rs ${item.price} each</div>
                 </div>
-                <div class="fw-semibold">$${itemTotal}</div>
+                <div class="fw-semibold">Rs ${itemTotal}</div>
             </div>
         `;
   });
 
   container.innerHTML = html;
   document.getElementById("summarySubtotal").innerText =
-    `$${subtotal.toFixed(2)}`;
-  document.getElementById("summaryTotal").innerText = `$${subtotal.toFixed(2)}`;
+    `Rs ${subtotal.toFixed(2)}`;
+  document.getElementById("summaryTotal").innerText =
+    `Rs ${subtotal.toFixed(2)}`;
 }
 
 async function placeOrder(e) {

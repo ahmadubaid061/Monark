@@ -25,8 +25,8 @@ function displayOrderConfirmation() {
                 <td>${item.name}</td>
                 <td>${item.size || "M"}</td>
                 <td>${item.quantity}</td>
-                <td>$${item.price}</td>
-                <td>$${(item.price * item.quantity).toFixed(2)}</td>
+                <td>Rs ${item.price}</td>
+                <td>Rs ${(item.price * item.quantity).toFixed(2)}</td>
             </tr>
         `;
   });
@@ -65,7 +65,7 @@ function displayOrderConfirmation() {
             <tfoot>
                 <tr>
                     <td colspan="4" class="text-end"><strong>Subtotal:</strong></td>
-                    <td><strong>$${order.subtotal.toFixed(2)}</strong></td>
+                    <td><strong>Rs ${order.subtotal.toFixed(2)}</strong></td>
                 </tr>
                 <tr>
                     <td colspan="4" class="text-end"><strong>Shipping:</strong></td>
@@ -73,7 +73,7 @@ function displayOrderConfirmation() {
                 </tr>
                 <tr>
                     <td colspan="4" class="text-end"><strong>Total:</strong></td>
-                    <td><strong>$${order.total.toFixed(2)}</strong></td>
+                    <td><strong>Rs ${order.total.toFixed(2)}</strong></td>
                 </tr>
             </tfoot>
         </table>

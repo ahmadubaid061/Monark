@@ -56,7 +56,7 @@ function displayCart() {
                     <div class="col-md-5 col-8">
                         <h6 class="fw-semibold mb-1">${item.name}</h6>
                         <p class="small text-muted mb-1">Size: ${item.size || "M"}</p>
-                        <p class="small text-muted">Price: $${item.price}</p>
+                        <p class="small text-muted">Price: Rs ${item.price}</p>
                     </div>
                     <div class="col-md-3 col-6 mt-3 mt-md-0">
                         <div class="quantity-control">
@@ -66,7 +66,7 @@ function displayCart() {
                         </div>
                     </div>
                     <div class="col-md-2 col-6 mt-3 mt-md-0 text-end">
-                        <div class="fw-semibold">$${itemTotal}</div>
+                        <div class="fw-semibold">Rs ${itemTotal}</div>
                         <a href="#" class="remove-item" onclick="removeItem(${index}); return false;">
                             <i class="fas fa-trash-alt me-1"></i> Remove
                         </a>
@@ -131,8 +131,8 @@ function removeItem(index) {
 
 // Update totals display
 function updateTotals(subtotal, total) {
-  document.getElementById("subtotal").innerText = `$${subtotal.toFixed(2)}`;
-  document.getElementById("total").innerText = `$${total.toFixed(2)}`;
+  document.getElementById("subtotal").innerText = `Rs ${subtotal.toFixed(2)}`;
+  document.getElementById("total").innerText = `Rs ${total.toFixed(2)}`;
 }
 
 // Update cart icon badge (for when returning to homepage)

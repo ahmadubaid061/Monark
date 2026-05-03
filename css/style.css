@@ -93,9 +93,9 @@ body {
 
 .card-img-top {
   background-color: #f5f2ef;
-  padding: 1rem;
+  padding: 0.5rem;
   object-fit: contain;
-  height: 200px;
+  height: 250px;
   width: 100%;
   transition: all 0.25s;
 }
@@ -103,7 +103,7 @@ body {
   width: 100%;
 }
 .card-body {
-  padding-left: 10px;
+  padding: 1rem;
 }
 
 .badge-sale {
@@ -163,7 +163,78 @@ footer {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
+/* Mobile image size */
+@media (max-width: 768px) {
+  .card-img-top {
+    height: 180px;
+    padding: 0.5rem;
+  }
+}
+/* Desktop larger screens */
+@media (min-width: 1200px) {
+  .card-img-top {
+    height: 280px;
+  }
+}
+/* Make product grid tighter on mobile */
+@media (max-width: 576px) {
+  /*search icon*/
+  .col-6 .position-relative {
+    max-width: 130px !important;
+  }
 
+  #searchInput {
+    font-size: 11px !important;
+    padding-left: 28px !important;
+  }
+
+  #searchInput::placeholder {
+    font-size: 10px;
+  }
+  .products-container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  /* Force 2 columns on mobile */
+  .row-cols-1 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .product-card .card-body {
+    padding: 0.75rem;
+  }
+
+  .card-img-top {
+    height: 150px;
+    padding: 0.5rem;
+  }
+
+  .card-title {
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .price-new {
+    font-size: 0.9rem;
+  }
+
+  .price-old {
+    font-size: 0.7rem;
+  }
+
+  .size-badge {
+    font-size: 0.6rem;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .badge-sale {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+  }
+}
 @media (max-width: 992px) {
   .navbar-nav {
     padding-top: 1rem;
