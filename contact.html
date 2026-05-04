@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <title>MONARK | Contact Us</title>
+
+    <!-- Bootstrap 5 CSS + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <style>
+        .contact-hero {
+            background: linear-gradient(135deg, #f8f4ef 0%, #ede7df 100%);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            height: 100%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-icon {
+            width: 70px;
+            height: 70px;
+            background: #b8860b;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+        }
+
+        .contact-form {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #b8860b;
+            box-shadow: 0 0 0 0.2rem rgba(184, 134, 11, 0.25);
+        }
+
+        .btn-submit {
+            background: #b8860b;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #9a7209;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .breadcrumb-custom {
+            background: transparent;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb-custom a {
+            color: #666;
+            text-decoration: none;
+        }
+
+        .breadcrumb-custom a:hover {
+            color: #b8860b;
+        }
+
+        .map-container {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            margin: 0 5px;
+            transition: all 0.3s;
+            color: #333;
+        }
+
+        .social-links a:hover {
+            background: #b8860b;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="container-fluid container-fluid-custom px-4 px-lg-5 py-3 border-bottom bg-white">
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <a href="index.html">
+                        <img src="logo_white.webp" alt="MONARK Logo" style="height: 40px" />
+                    </a>
+                </div>
+                <div class="col-6 d-flex justify-content-end align-items-center gap-3">
+                    <div class="position-relative d-none d-md-block">
+                        <input type="text" id="searchInput" class="form-control form-control-sm"
+                            placeholder="Search products..."
+                            style="width: 180px; border-radius: 30px; padding-left: 35px;">
+                        <i class="fas fa-search"
+                            style="position: absolute; left: 12px; top: 9px; font-size: 13px; color: #999;"></i>
+                    </div>
+                    <i class="fas fa-search fs-5 nav-icon d-md-none" id="mobileSearchIcon"></i>
+                    <i class="fas fa-shopping-bag fs-5 nav-icon" id="cartIcon" style="position: relative;"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg bg-white border-top border-bottom py-2 sticky-top shadow-sm">
+            <div class="container-fluid container-fluid-custom px-4 px-lg-5">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-2">
+                        <li class="nav-item"><a class="nav-link" href="index.html">NEW IN</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html">TOPS</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html">BOTTOMS</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html">FORMAL WEAR</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html">EASY WEAR</a></li>
+                        <li class="nav-item dropdown" id="accessoriesDropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="accessoriesLink" role="button"
+                                data-bs-toggle="dropdown">ACCESSORIES</a>
+                            <ul class="dropdown-menu dropdown-menu-custom">
+                                <li><a class="dropdown-item-custom" href="index.html">Bags</a></li>
+                                <li><a class="dropdown-item-custom" href="index.html">Socks</a></li>
+                                <li><a class="dropdown-item-custom" href="index.html">Glasses</a></li>
+                                <li><a class="dropdown-item-custom" href="index.html">Ties</a></li>
+                                <li><a class="dropdown-item-custom" href="index.html">Wallets</a></li>
+                                <li><a class="dropdown-item-custom" href="index.html">Belts</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb-custom">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active">Contact Us</li>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- Hero Section -->
+        <div class="contact-hero">
+            <h1 class="display-5 fw-semibold mb-3">Get in Touch</h1>
+            <p class="lead text-muted mb-0">We'd love to hear from you! Reach out with any questions, feedback, or
+                concerns.</p>
+        </div>
+
+        <div class="row">
+            <!-- Contact Information Cards -->
+            <div class="col-md-4 mb-4">
+                <div class="contact-card text-center">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h5 class="fw-semibold">Visit Us</h5>
+                    <p class="text-muted mb-0">Sector B-17<br>Islamabad, Pakistan</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="contact-card text-center">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h5 class="fw-semibold">Call Us</h5>
+                    <p class="text-muted mb-0">+92 3428994095<br>+92 3255921184</p>
+                    <small class="text-muted">Mon-Fri, 10am-7pm</small>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4">
+                <div class="contact-card text-center">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h5 class="fw-semibold">Email Us</h5>
+                    <p class="text-muted mb-0">ahamdubaidedu@gmail.com</p>
+                    <small class="text-muted">Response within 24h</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <!-- Contact Form -->
+            <div class="col-lg-7 mb-4">
+                <div class="contact-form">
+                    <h3 class="fw-semibold mb-4">Send Us a Message</h3>
+
+                    <form id="contactForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Your Name *</label>
+                                <input type="text" class="form-control" id="contactName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" id="contactEmail" required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Subject *</label>
+                                <select class="form-select" id="contactSubject" required>
+                                    <option value="">Select subject</option>
+                                    <option value="order">Order Inquiry</option>
+                                    <option value="product">Product Question</option>
+                                    <option value="return">Return/Exchange</option>
+                                    <option value="feedback">Feedback</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Order Number (if applicable)</label>
+                                <input type="text" class="form-control" id="contactOrderNumber"
+                                    placeholder="e.g., ORD-1234567890">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Message *</label>
+                                <textarea class="form-control" id="contactMessage" rows="5" required></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-submit">
+                                    <i class="fas fa-paper-plane me-2"></i> Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div id="successMessage" class="success-message">
+                        <i class="fas fa-check-circle me-2"></i> Thank you for your message! We'll get back to you
+                        within 24 hours.
+                    </div>
+
+                    <div id="errorMessage" class="error-message">
+                        <i class="fas fa-exclamation-circle me-2"></i> There was an error sending your message. Please
+                        try again.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map & Social -->
+            <div class="col-lg-5 mb-4">
+                <div class="contact-card">
+                    <h5 class="fw-semibold mb-3">Find Us</h5>
+                    <div class="map-container mb-4">
+
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3319.5941064908984!2d72.82137997409971!3d33.69357273658676!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38dfc07baccde73d%3A0x97722a090def90bc!2sSir%20Syed%20CASE%20Institute%20of%20Technology!5e0!3m2!1sen!2s!4v1777906616631!5m2!1sen!2s"
+                            width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy">
+                        </iframe>
+                    </div>
+
+                    <h5 class="fw-semibold mb-3">Follow Us</h5>
+                    <div class="social-links mb-4">
+                        <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+                    </div>
+
+                    <div class="mt-4 pt-2 border-top">
+                        <h6 class="fw-semibold">Business Hours</h6>
+                        <ul class="list-unstyled text-muted small">
+                            <li><i class="far fa-calendar-alt me-2"></i> Monday - Friday: 10:00 AM - 7:00 PM</li>
+                            <li><i class="far fa-calendar-alt me-2"></i> Saturday: 11:00 AM - 5:00 PM</li>
+                            <li><i class="far fa-calendar-alt me-2"></i> Sunday: Closed</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="contact-card">
+                    <h4 class="fw-semibold mb-4 text-center">Frequently Asked Questions</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <h6 class="fw-semibold">How long does shipping take?</h6>
+                                <p class="text-muted small">Standard shipping takes 3-5 business days within Pakistan.
+                                </p>
+                            </div>
+                            <div class="mb-3">
+                                <h6 class="fw-semibold">What is your return policy?</h6>
+                                <p class="text-muted small">Returns accepted within 14 days of delivery with original
+                                    packaging.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <h6 class="fw-semibold">Do you ship internationally?</h6>
+                                <p class="text-muted small">Currently we ship within Pakistan only. International
+                                    shipping coming soon.</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6 class="fw-semibold">How can I track my order?</h6>
+                                <p class="text-muted small">You'll receive a tracking number via email once your order
+                                    ships.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="pt-5 pb-4 bg-dark text-white">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-md-4">
+                    <h5 class="text-white mb-3">MONARK</h5>
+                    <p class="small">Timeless craftsmanship meets modern comfort.</p>
+                </div>
+                <div class="col-md-2 col-6">
+                    <h6 class="text-white-50">SHOP</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="index.html" class="text-white-50 text-decoration-none">Tops</a></li>
+                        <li><a href="index.html" class="text-white-50 text-decoration-none">Bottoms</a></li>
+                        <li><a href="index.html" class="text-white-50 text-decoration-none">Formal Wear</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 col-6">
+                    <h6 class="text-white-50">SUPPORT</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="contact.html" class="text-white-50 text-decoration-none">Contact</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Returns</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Size Guide</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="text-white-50">FOLLOW US</h6>
+                    <div class="fs-5">
+                        <i class="fab fa-instagram me-3 text-white-50"></i>
+                        <i class="fab fa-facebook me-3 text-white-50"></i>
+                        <i class="fab fa-twitter text-white-50"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="border-top border-secondary mt-4 pt-3 text-center small text-white-50">
+                © 2025 MONARK — Premium essentials. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/contact.js"></script>
+    <script src="js/global.js"></script>
+</body>
+
+</html>

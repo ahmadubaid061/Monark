@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <title>MONARK | Checkout</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="css/style.css" />
-    
+
     <style>
         .checkout-summary {
             background: #f8f9fa;
@@ -17,6 +18,7 @@
             position: sticky;
             top: 100px;
         }
+
         .order-item {
             display: flex;
             gap: 15px;
@@ -24,19 +26,24 @@
             padding-bottom: 15px;
             border-bottom: 1px solid #eee;
         }
+
         .order-item-img {
             width: 60px;
             height: 60px;
             object-fit: cover;
             border-radius: 8px;
         }
+
         .order-item-details {
             flex: 1;
         }
-        .form-control:focus, .form-select:focus {
+
+        .form-control:focus,
+        .form-select:focus {
             border-color: #b8860b;
             box-shadow: 0 0 0 0.2rem rgba(184, 134, 11, 0.25);
         }
+
         .breadcrumb-custom {
             background: transparent;
             padding: 0;
@@ -44,6 +51,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- HEADER -->
@@ -75,7 +83,8 @@
                         <li class="nav-item"><a class="nav-link" href="index.html">FORMAL WEAR</a></li>
                         <li class="nav-item"><a class="nav-link" href="index.html">EASY WEAR</a></li>
                         <li class="nav-item dropdown" id="accessoriesDropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="accessoriesLink" role="button" data-bs-toggle="dropdown">ACCESSORIES</a>
+                            <a class="nav-link dropdown-toggle" href="#" id="accessoriesLink" role="button"
+                                data-bs-toggle="dropdown">ACCESSORIES</a>
                             <ul class="dropdown-menu dropdown-menu-custom">
                                 <li><a class="dropdown-item-custom" href="index.html">Bags</a></li>
                                 <li><a class="dropdown-item-custom" href="index.html">Socks</a></li>
@@ -109,7 +118,7 @@
             <div class="col-lg-7">
                 <div class="dashboard-card">
                     <h5 class="mb-4"><i class="fas fa-user me-2"></i>Shipping Information</h5>
-                    
+
                     <form id="checkoutForm">
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -126,7 +135,8 @@
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Phone Number *</label>
-                                <input type="tel" class="form-control" id="phone" placeholder="+92 XXX XXXXXXX" required>
+                                <input type="tel" class="form-control" id="phone" placeholder="+92 XXX XXXXXXX"
+                                    required>
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Address *</label>
@@ -145,13 +155,15 @@
                         <h5 class="mt-4 mb-3"><i class="fas fa-credit-card me-2"></i>Payment Method</h5>
                         <div class="mb-3">
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="cashOnDelivery" value="cash" checked>
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="cashOnDelivery"
+                                    value="cash" checked>
                                 <label class="form-check-label" for="cashOnDelivery">
                                     Cash on Delivery (COD)
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="bank">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer"
+                                    value="bank">
                                 <label class="form-check-label" for="bankTransfer">
                                     Bank Transfer (Coming Soon)
                                 </label>
@@ -222,7 +234,7 @@
                 <div class="col-md-2 col-6">
                     <h6 class="text-white-50">SUPPORT</h6>
                     <ul class="list-unstyled small">
-                        <li><a href="#" class="text-white-50 text-decoration-none">Contact</a></li>
+                        <li><a href="contact.html" class="text-white-50 text-decoration-none">Contact</a></li>
                         <li><a href="#" class="text-white-50 text-decoration-none">Returns</a></li>
                         <li><a href="#" class="text-white-50 text-decoration-none">Size Guide</a></li>
                     </ul>
@@ -246,5 +258,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="js/checkout.js"></script>
+    <script src="js/global.js"></script>
 </body>
+
 </html>
