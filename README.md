@@ -1,4 +1,4 @@
-```markdown
+````markdown
 # 🛍️ MONARK - Premium Fashion E-commerce
 
 A fully functional e-commerce website with product management, shopping cart, checkout system, and admin dashboard.
@@ -42,34 +42,19 @@ A fully functional e-commerce website with product management, shopping cart, ch
 ---
 
 ## 📁 Project Structure
-```
 
-MONARK/
-├── index.html # Homepage
-├── product-details.html # Product view
-├── cart.html # Shopping cart
-├── checkout.html # Order form
-├── order-confirmation.html # Order success
-├── dashboard.html # Admin panel
-├── contact.html # Contact page
-├── css/
-│ └── style.css
-└── js/
-├── global.js # Shared functions
-├── script.js # Homepage logic
-├── product-details.js
-├── cart.js
-├── checkout.js
-├── dashboard.js
-└── contact.js
+**Pages:** index.html | product-details.html | cart.html | checkout.html | order-confirmation.html | dashboard.html | contact.html
 
-````
+**CSS:** css/style.css
+
+**JavaScript:** js/global.js | js/script.js | js/product-details.js | js/cart.js | js/checkout.js | js/order-confirmation.js | js/dashboard.js | js/contact.js
 
 ---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js
 - Firebase CLI
 
@@ -88,6 +73,7 @@ firebase login
 
 # Deploy
 firebase deploy
+```
 ````
 
 ---
