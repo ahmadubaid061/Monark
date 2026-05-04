@@ -1,35 +1,26 @@
 // ============================================
-// FIREBASE CONFIGURATION FOR HOMEPAGE
+// HOMEPAGE SCRIPT (index.html)
 // ============================================
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDNJAKyOPmnNdwxhO6ptqe1EXE9YSOTmjw",
-  authDomain: "monark-ecommerce.firebaseapp.com",
-  projectId: "monark-ecommerce",
-  storageBucket: "monark-ecommerce.firebasestorage.app",
-  messagingSenderId: "721924539836",
-  appId: "1:721924539836:web:5dfe03a4faa903173257b9",
-};
-
-// Initialize Firebase if not already initialized
-if (typeof firebase !== "undefined" && !firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-  console.log("Firebase initialized on homepage!");
-}
-
-// Global variables
-let db = null;
-let useFirebase = false;
-let currentCategory = "home";
-let currentSubFilter = null;
-let allProductsCache = [];
+// This file handles product loading, category filtering, and search
+// Global functions are imported from global.js
 
 // ============================================
-// FIREBASE PRODUCT LOADING
+// GLOBAL VARIABLES
+// ============================================
+
+let db = null; // Firestore database instance
+let useFirebase = false; // Flag to check if Firebase is available
+let currentCategory = "home"; // Currently selected category
+let currentSubFilter = null; // Currently selected subcategory (for accessories)
+let allProductsCache = []; // Cache of all products for faster search
+
+// ============================================
+// FIREBASE CONNECTION CHECK
 // ============================================
 
 /**
  * Checks if Firebase is available and loads products
+ * @returns {boolean} True if Firebase connected
  */
 function checkFirebase() {
   if (typeof firebase !== "undefined" && firebase.apps.length) {
@@ -52,18 +43,20 @@ function checkFirebase() {
   }
 }
 
+// ============================================
+// LOAD PRODUCTS FROM FIRESTORE
+// ============================================
+
 /**
  * Loads products from Firestore based on category and subcategory
  * @param {string} category - The product category (home, tops, bottoms, etc.)
  * @param {string|null} subFilter - Subcategory for accessories (bags, socks, etc.)
  */
 async function loadProductsFromFirebase(category, subFilter) {
-  if (!db) {
-    return;
-  }
+  if (!db) return;
 
   // Reset search input when changing categories
-  const searchInput = document.getElementById("searchInput");
+  const searchInput = document.getElementById("globalSearchInput");
   if (searchInput) searchInput.value = "";
 
   // Store current category for search
@@ -83,14 +76,18 @@ async function loadProductsFromFirebase(category, subFilter) {
 
     // Apply filters based on category
     if (category === "accessories" && subFilter) {
+      // Accessories with specific subcategory (bags, socks, glasses, etc.)
       query = query
         .where("category", "==", "accessories")
         .where("subcategory", "==", subFilter);
     } else if (category === "accessories") {
+      // All accessories (no subcategory filter)
       query = query.where("category", "==", "accessories");
     } else if (category !== "home") {
+      // Specific main category (tops, bottoms, formalwear, easywear)
       query = query.where("category", "==", category);
     }
+    // For "home" - show all products (no filter)
 
     const snapshot = await query.get();
 
@@ -133,7 +130,7 @@ async function loadProductsFromFirebase(category, subFilter) {
             <img src="${p.imageUrl || "https://placehold.co/600x800?text=MONARK"}" class="card-img-top" alt="${p.name}">
             <div class="card-body">
               ${hasSale ? `<div class="mb-2"><span class="badge-sale">-${salePercent}%</span></div>` : '<div class="mb-2">&nbsp;</div>'}
-              <h6 class="card-title fw-semibold">${p.name}</h6>
+              <h6 class="card-title fw-semibold">${escapeHtml(p.name)}</h6>
               <div class="mt-1">
                 ${p.oldPrice ? `<span class="price-old">₨${p.oldPrice}</span>` : ""}
                 <span class="price-new">₨${p.price}</span>
@@ -210,11 +207,12 @@ function updateHeaders(category, subFilter) {
 }
 
 // ============================================
-// SEARCH FUNCTIONALITY
+// SEARCH FUNCTIONALITY (Using cached products)
 // ============================================
 
 /**
  * Caches all products from Firestore for faster searching
+ * Called once when page loads
  */
 async function cacheAllProducts() {
   if (!db) return;
@@ -235,9 +233,11 @@ async function cacheAllProducts() {
 
 /**
  * Filters products based on search query and displays results
+ * Uses cached products for faster filtering
+ * Searches by: product name, category, and description
  */
 function performSearch() {
-  const searchInput = document.getElementById("searchInput");
+  const searchInput = document.getElementById("globalSearchInput");
   if (!searchInput) return;
 
   const query = searchInput.value.trim().toLowerCase();
@@ -252,7 +252,7 @@ function performSearch() {
     return;
   }
 
-  // Filter products from cache
+  // Filter products from cache - includes category search
   const filtered = allProductsCache.filter((product) => {
     return (
       product.name.toLowerCase().includes(query) ||
@@ -311,7 +311,7 @@ function displaySearchResults(products, query) {
           <img src="${product.imageUrl || "https://placehold.co/600x800?text=MONARK"}" class="card-img-top" alt="${product.name}">
           <div class="card-body">
             ${hasSale ? `<div class="mb-2"><span class="badge-sale">-${salePercent}%</span></div>` : '<div class="mb-2">&nbsp;</div>'}
-            <h6 class="card-title fw-semibold">${product.name}</h6>
+            <h6 class="card-title fw-semibold">${escapeHtml(product.name)}</h6>
             <div class="mt-1">
               ${product.oldPrice ? `<span class="price-old">₨${product.oldPrice}</span>` : ""}
               <span class="price-new">₨${product.price}</span>
@@ -334,101 +334,23 @@ function displaySearchResults(products, query) {
   });
 }
 
-/**
- * Sets up the search input event listener with debounce
- */
-function setupSearch() {
-  const searchInput = document.getElementById("searchInput");
-  if (!searchInput) return;
-
-  let searchTimeout;
-  searchInput.addEventListener("input", (e) => {
-    if (searchTimeout) clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-      performSearch();
-    }, 300);
-  });
-}
-
 // ============================================
-// CART FUNCTIONS
+// HELPER FUNCTIONS
 // ============================================
 
 /**
- * Adds a product to the shopping cart (localStorage)
- * @param {string} productId - The Firestore document ID of the product
+ * Escapes HTML special characters to prevent XSS attacks
+ * @param {string} str - The string to escape
+ * @returns {string} - Escaped string safe for HTML
  */
-async function addToCart(productId) {
-  if (!db) return;
-
-  try {
-    const doc = await db.collection("products").doc(productId).get();
-    if (!doc.exists) return;
-
-    const product = doc.data();
-    let cart = localStorage.getItem("monark_cart");
-    cart = cart ? JSON.parse(cart) : [];
-
-    const existing = cart.find((item) => item.id === productId);
-    if (existing) {
-      existing.quantity += 1;
-    } else {
-      cart.push({
-        id: productId,
-        name: product.name,
-        price: product.price,
-        imageUrl: product.imageUrl,
-        size: product.sizes?.[0] || "M",
-        quantity: 1,
-      });
-    }
-
-    localStorage.setItem("monark_cart", JSON.stringify(cart));
-    updateCartCount();
-    showToastLocal(`${product.name} added to cart!`);
-  } catch (error) {
-    console.error("Error adding to cart:", error);
-  }
-}
-
-/**
- * Updates the cart badge count on the cart icon
- */
-function updateCartCount() {
-  const cart = localStorage.getItem("monark_cart");
-  let count = 0;
-
-  if (cart) {
-    const items = JSON.parse(cart);
-    count = items.reduce((total, item) => total + item.quantity, 0);
-  }
-
-  const cartIcon = document.getElementById("cartIcon");
-  if (cartIcon) {
-    const existing = cartIcon.querySelector(".cart-badge");
-    if (existing) existing.remove();
-
-    if (count > 0) {
-      const badge = document.createElement("span");
-      badge.className = "cart-badge";
-      badge.textContent = count;
-      badge.style.cssText =
-        "position:absolute;background:#b8860b;color:white;border-radius:50%;font-size:10px;padding:2px 6px;margin-left:8px;margin-top:-8px;";
-      cartIcon.style.position = "relative";
-      cartIcon.appendChild(badge);
-    }
-  }
-}
-
-/**
- * Displays a temporary toast notification
- * @param {string} message - The message to display
- */
-function showToastLocal(message) {
-  const toast = document.createElement("div");
-  toast.innerHTML = `<div style="position:fixed;bottom:20px;right:20px;background:#28a745;color:white;padding:12px 24px;border-radius:8px;z-index:9999;">${message}</div>`;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 2000);
+function escapeHtml(str) {
+  if (!str) return "";
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 // ============================================
@@ -439,7 +361,7 @@ function showToastLocal(message) {
  * Sets up all navigation event listeners (categories, subcategories, footer links)
  */
 function initEvents() {
-  // Category navigation links
+  // Category navigation links (NEW IN, TOPS, BOTTOMS, etc.)
   const navLinks = document.querySelectorAll("[data-category]");
   navLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
@@ -461,7 +383,7 @@ function initEvents() {
     });
   });
 
-  // Accessories subcategory dropdown items
+  // Accessories subcategory dropdown items (Bags, Socks, Glasses, etc.)
   const subItems = document.querySelectorAll(".dropdown-item-custom");
   subItems.forEach((item) => {
     item.addEventListener("click", (e) => {
@@ -482,14 +404,12 @@ function initEvents() {
       if (useFirebase) loadProductsFromFirebase(cat, null);
     });
   });
-
-  // Cart icon click - go to cart page
-  document.getElementById("cartIcon")?.addEventListener("click", () => {
-    window.location.href = "cart.html";
-  });
 }
 
-// Bootstrap hover dropdown for accessories menu
+// ============================================
+// BOOTSTRAP HOVER DROPDOWN (Accessories menu)
+// ============================================
+
 const dropdownElement = document.getElementById("accessoriesDropdown");
 if (dropdownElement) {
   dropdownElement.addEventListener("mouseenter", function () {
@@ -517,7 +437,5 @@ if (dropdownElement) {
  */
 document.addEventListener("DOMContentLoaded", function () {
   initEvents();
-  updateCartCount();
   checkFirebase();
-  setupSearch();
 });

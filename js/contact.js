@@ -1,94 +1,87 @@
 // ============================================
-// CONTACT PAGE FUNCTIONALITY
+// CONTACT PAGE SCRIPT (contact.html)
+// ============================================
+// This file handles contact form submission and saves messages to Firestore
+
+// ============================================
+// GLOBAL VARIABLES
 // ============================================
 
-// Firebase Configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDNJAKyOPmnNdwxhO6ptqe1EXE9YSOTmjw",
-  authDomain: "monark-ecommerce.firebaseapp.com",
-  projectId: "monark-ecommerce",
-  storageBucket: "monark-ecommerce.firebasestorage.app",
-  messagingSenderId: "721924539836",
-  appId: "1:721924539836:web:5dfe03a4faa903173257b9",
-};
+let db = globalDb; // Firestore database instance
 
-// Initialize Firebase if not already initialized
-if (typeof firebase !== "undefined" && !firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-
-const db = firebase.firestore();
+// ============================================
+// CONTACT FORM HANDLING
+// ============================================
 
 /**
  * Handles contact form submission
  * Saves messages to Firestore 'contacts' collection
+ * @param {Event} e - Form submit event
  */
-document
-  .getElementById("contactForm")
-  ?.addEventListener("submit", async (e) => {
-    e.preventDefault();
+async function handleContactSubmit(e) {
+  e.preventDefault();
 
-    // Get form values
-    const name = document.getElementById("contactName").value.trim();
-    const email = document.getElementById("contactEmail").value.trim();
-    const subject = document.getElementById("contactSubject").value;
-    const orderNumber = document
-      .getElementById("contactOrderNumber")
-      .value.trim();
-    const message = document.getElementById("contactMessage").value.trim();
+  // Get form values
+  const name = document.getElementById("contactName").value.trim();
+  const email = document.getElementById("contactEmail").value.trim();
+  const subject = document.getElementById("contactSubject").value;
+  const orderNumber =
+    document.getElementById("contactOrderNumber")?.value.trim() || "";
+  const message = document.getElementById("contactMessage").value.trim();
 
-    // Validate
-    if (!name || !email || !subject || !message) {
-      showError("Please fill in all required fields.");
-      return;
-    }
+  // Validate required fields
+  if (!name || !email || !subject || !message) {
+    showError("Please fill in all required fields.");
+    return;
+  }
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      showError("Please enter a valid email address.");
-      return;
-    }
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    showError("Please enter a valid email address.");
+    return;
+  }
 
-    // Disable submit button
-    const submitBtn = document.querySelector(
-      "#contactForm button[type='submit']",
-    );
-    const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML =
-      '<i class="fas fa-spinner fa-spin me-2"></i> Sending...';
-    submitBtn.disabled = true;
+  // Disable submit button and show loading state
+  const submitBtn = document.querySelector(
+    "#contactForm button[type='submit']",
+  );
+  const originalText = submitBtn.innerHTML;
+  submitBtn.innerHTML =
+    '<i class="fas fa-spinner fa-spin me-2"></i> Sending...';
+  submitBtn.disabled = true;
 
-    try {
-      // Save to Firestore
-      await db.collection("contacts").add({
-        name: name,
-        email: email,
-        subject: subject,
-        orderNumber: orderNumber || null,
-        message: message,
-        status: "unread",
-        createdAt: new Date(),
-        ip: await getUserIP(),
-      });
+  try {
+    // Save message to Firestore
+    await db.collection("contacts").add({
+      name: name,
+      email: email,
+      subject: subject,
+      orderNumber: orderNumber || null,
+      message: message,
+      status: "unread",
+      createdAt: new Date(),
+      ip: await getUserIP(),
+    });
 
-      // Show success
-      showSuccess();
+    // Show success message
+    showSuccess();
 
-      // Reset form
-      document.getElementById("contactForm").reset();
-    } catch (error) {
-      console.error("Error sending message:", error);
-      showError("Failed to send message. Please try again.");
-    } finally {
-      // Re-enable submit button
-      submitBtn.innerHTML = originalText;
-      submitBtn.disabled = false;
-    }
-  });
+    // Reset form
+    document.getElementById("contactForm").reset();
+  } catch (error) {
+    console.error("Error sending message:", error);
+    showError("Failed to send message. Please try again.");
+  } finally {
+    // Re-enable submit button
+    submitBtn.innerHTML = originalText;
+    submitBtn.disabled = false;
+  }
+}
 
 /**
- * Gets user's IP address (for tracking)
+ * Gets user's IP address for tracking purposes
+ * @returns {string} User's IP address or "Unknown"
  */
 async function getUserIP() {
   try {
@@ -100,74 +93,75 @@ async function getUserIP() {
   }
 }
 
+// ============================================
+// UI MESSAGE DISPLAY
+// ============================================
+
 /**
- * Shows success message
+ * Shows success message after form submission
  */
 function showSuccess() {
   const successDiv = document.getElementById("successMessage");
   const errorDiv = document.getElementById("errorMessage");
 
-  successDiv.style.display = "block";
-  errorDiv.style.display = "none";
+  if (successDiv) successDiv.style.display = "block";
+  if (errorDiv) errorDiv.style.display = "none";
 
   // Hide after 5 seconds
   setTimeout(() => {
-    successDiv.style.display = "none";
+    if (successDiv) successDiv.style.display = "none";
   }, 5000);
 }
 
 /**
  * Shows error message
+ * @param {string} message - Error message to display
  */
 function showError(message) {
   const errorDiv = document.getElementById("errorMessage");
   const successDiv = document.getElementById("successMessage");
 
-  errorDiv.innerHTML = `<i class="fas fa-exclamation-circle me-2"></i> ${message}`;
-  errorDiv.style.display = "block";
-  successDiv.style.display = "none";
+  if (errorDiv) {
+    errorDiv.innerHTML = `<i class="fas fa-exclamation-circle me-2"></i> ${escapeHtml(message)}`;
+    errorDiv.style.display = "block";
+  }
+  if (successDiv) successDiv.style.display = "none";
 
   // Hide after 5 seconds
   setTimeout(() => {
-    errorDiv.style.display = "none";
+    if (errorDiv) errorDiv.style.display = "none";
   }, 5000);
 }
 
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
+
 /**
- * Update cart badge on contact page
+ * Escapes HTML special characters to prevent XSS attacks
+ * @param {string} str - The string to escape
+ * @returns {string} - Escaped string safe for HTML
  */
-function updateCartCount() {
-  const cart = localStorage.getItem("monark_cart");
-  let count = 0;
-
-  if (cart) {
-    const items = JSON.parse(cart);
-    count = items.reduce((total, item) => total + item.quantity, 0);
-  }
-
-  const cartIcon = document.getElementById("cartIcon");
-  if (cartIcon) {
-    const existing = cartIcon.querySelector(".cart-badge");
-    if (existing) existing.remove();
-
-    if (count > 0) {
-      const badge = document.createElement("span");
-      badge.className = "cart-badge";
-      badge.textContent = count;
-      badge.style.cssText =
-        "position:absolute;background:#b8860b;color:white;border-radius:50%;font-size:10px;padding:2px 6px;margin-left:8px;margin-top:-8px;";
-      cartIcon.style.position = "relative";
-      cartIcon.appendChild(badge);
-    }
-  }
+function escapeHtml(str) {
+  if (!str) return "";
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
-// Initialize on page load
-document.addEventListener("DOMContentLoaded", () => {
-  updateCartCount();
+// ============================================
+// INITIALIZATION
+// ============================================
 
-  // Cart icon click
-  document.getElementById("cartIcon")?.addEventListener("click", () => {
-    window.location.href = "cart.html";
-  });
+/**
+ * Initialize contact page when DOM is loaded
+ */
+document.addEventListener("DOMContentLoaded", () => {
+  const contactForm = document.getElementById("contactForm");
+  if (contactForm) {
+    contactForm.addEventListener("submit", handleContactSubmit);
+  }
 });
