@@ -43,11 +43,39 @@ A fully functional e-commerce website with product management, shopping cart, ch
 
 ## 📁 Project Structure
 
-**Pages:** index.html | product-details.html | cart.html | checkout.html | order-confirmation.html | dashboard.html | contact.html
+### 🌐 Pages
 
-**CSS:** css/style.css
+- `index.html` — Home page
+- `product-details.html` — Product details view
+- `cart.html` — Shopping cart
+- `checkout.html` — Checkout process
+- `order-confirmation.html` — Order success page
+- `dashboard.html` — User dashboard
+- `contact.html` — Contact page
 
-**JavaScript:** js/global.js | js/script.js | js/product-details.js | js/cart.js | js/checkout.js | js/order-confirmation.js | js/dashboard.js | js/contact.js
+---
+
+### 🎨 Stylesheets
+
+- `css/style.css` — Main stylesheet
+
+---
+
+### ⚙️ JavaScript Files
+
+#### 🔹 Global
+
+- `js/global.js` — Shared functionality across pages
+
+#### 🔹 Page-Specific Scripts
+
+- `js/script.js` — Home page logic
+- `js/product-details.js` — Product details interactions
+- `js/cart.js` — Cart functionality
+- `js/checkout.js` — Checkout logic
+- `js/order-confirmation.js` — Order confirmation handling
+- `js/dashboard.js` — Dashboard features
+- `js/contact.js` — Contact form handling
 
 ---
 
