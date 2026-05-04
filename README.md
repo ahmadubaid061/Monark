@@ -1,5 +1,3 @@
-# Here's a shorter, clean README for your MONARK E-commerce project:
-
 ```markdown
 # 🛍️ MONARK - Premium Fashion E-commerce
 
