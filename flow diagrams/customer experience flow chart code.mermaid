@@ -1,0 +1,78 @@
+flowchart TD
+    START([🟢 Customer arrives]) --> A[🌐 Visits Website<br/>monark-ecommerce.web.app]
+    
+    A --> B[🏠 Homepage Loads<br/>Products displayed from Firestore]
+    
+    B --> C{🔍 What does<br/>customer want?}
+    
+    C -->|Browse Categories| D[📂 Click Category<br/>TOPS / BOTTOMS / ACCESSORIES]
+    C -->|Search Products| E[🔎 Type in Search Bar<br/>Filters products in real-time]
+    C -->|View Product| F[🖱️ Click on Product Card]
+    
+    D --> B
+    E --> F
+    F --> G[📱 Product Details Page<br/>product-details.html?id=XXX]
+    
+    G --> H[👀 View Product Info<br/>- Images<br/>- Price in ₨<br/>- Description<br/>- Size options<br/>- Quantity selector]
+    
+    H --> I{Select Size?}
+    I -->|Yes| J[✅ Size selected<br/>S, M, L, XL]
+    I -->|No| K[⚠️ Alert: Please select size]
+    K --> H
+    
+    J --> L[➕ Click 'Add to Cart']
+    
+    L --> M[💾 Product saved to<br/>localStorage (browser memory)]
+    
+    M --> N[🛒 Cart badge updates<br/>Shows item count]
+    
+    N --> O{Continue shopping<br/>or checkout?}
+    
+    O -->|Continue Shopping| B
+    
+    O -->|View Cart| P[🛍️ Cart Page<br/>cart.html]
+    
+    P --> Q[📋 Display all cart items<br/>- Product image<br/>- Name, size, price<br/>- Quantity controls<br/>- Remove button]
+    
+    Q --> R{Modify Cart?}
+    
+    R -->|Change Quantity| S[➕ Click +/- buttons<br/>Updates total price]
+    S --> P
+    
+    R -->|Remove Item| T[🗑️ Click Remove<br/>Item deleted from cart]
+    T --> P
+    
+    R -->|Proceed| U[✅ Click 'Proceed to Checkout']
+    
+    U --> V[📝 Checkout Page<br/>checkout.html]
+    
+    V --> W[✏️ Fill Shipping Information<br/>- First/Last Name<br/>- Email Address<br/>- Phone Number<br/>- Address, City<br/>- Postal Code]
+    
+    W --> X[💳 Select Payment Method<br/>Cash on Delivery]
+    
+    X --> Y[📦 Click 'Place Order']
+    
+    Y --> Z[💾 Order saved to Firestore<br/>'orders' collection]
+    
+    Z --> AA[🗑️ Cart cleared from localStorage]
+    
+    AA --> AB[🎉 Order Confirmation Page<br/>order-confirmation.html]
+    
+    AB --> AC[📧 Display Order Summary<br/>- Order Number<br/>- Customer details<br/>- Items purchased<br/>- Total amount]
+    
+    AC --> AD[🏁 Customer receives<br/>order confirmation]
+    
+    AD --> END([🔚 Customer Journey Complete])
+    
+    style START fill:#2ecc71,color:#fff
+    style END fill:#2ecc71,color:#fff
+    style A fill:#3498db,color:#fff
+    style G fill:#3498db,color:#fff
+    style P fill:#3498db,color:#fff
+    style V fill:#3498db,color:#fff
+    style AB fill:#3498db,color:#fff
+    style Z fill:#e74c3c,color:#fff
+    style AA fill:#e74c3c,color:#fff
+    style M fill:#f39c12,color:#fff
+    style L fill:#2ecc71,color:#fff
+    style Y fill:#2ecc71,color:#fff
