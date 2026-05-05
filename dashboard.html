@@ -1,188 +1,282 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
     <title>MONARK | Admin Dashboard</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="css/style.css" />
-    
+
     <style>
         body {
             background: #f0f2f5;
         }
+
         .dashboard-header {
             background: white;
             border-bottom: 1px solid #ddd;
             padding: 15px 0;
             margin-bottom: 30px;
         }
+
         .dashboard-card {
             background: white;
             border-radius: 16px;
             padding: 25px;
             margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
+
         .product-table {
             width: 100%;
             overflow-x: auto;
         }
+
         .product-table table {
             width: 100%;
             border-collapse: collapse;
         }
-        .product-table th, .product-table td {
+
+        .product-table th,
+        .product-table td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #eee;
         }
+
         .product-table th {
             background: #f8f9fa;
             font-weight: 600;
         }
+
         .product-table tr:hover {
             background: #fafafa;
         }
+
         .product-img {
             width: 50px;
             height: 50px;
             object-fit: cover;
             border-radius: 8px;
         }
+
         .login-container {
             max-width: 400px;
             margin: 100px auto;
             background: white;
             border-radius: 20px;
             padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
+
         .nav-tabs {
             border-bottom: 2px solid #e0e0e0;
             margin-bottom: 25px;
         }
+
         .nav-tabs .nav-link {
             border: none;
             color: #666;
             font-weight: 500;
             padding: 10px 20px;
         }
+
         .nav-tabs .nav-link.active {
             color: #b8860b;
             border-bottom: 2px solid #b8860b;
             background: transparent;
         }
+
         .btn-gold {
             background: #b8860b;
             color: white;
         }
+
         .btn-gold:hover {
             background: #9a7209;
             color: white;
         }
     </style>
 </head>
+
 <body>
 
-<!-- Login Section (hidden by default, shown when not logged in) -->
-<div id="loginSection" style="display: none;">
-    <div class="login-container">
-        <div class="text-center mb-4">
-            <img src="logo_white.webp" alt="MONARK" style="height: 50px;">
-            <h4 class="mt-3">Admin Login</h4>
-            <p class="text-muted">Enter your credentials to manage products</p>
-        </div>
-        <form id="loginForm">
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" id="adminEmail" required>
+    <!-- Login Section (hidden by default, shown when not logged in) -->
+    <div id="loginSection" style="display: none;">
+        <div class="login-container">
+            <div class="text-center mb-4">
+                <img src="logo_white.webp" alt="MONARK" style="height: 50px;">
+                <h4 class="mt-3">Admin Login</h4>
+                <p class="text-muted">Enter your credentials to manage products</p>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-control" id="adminPassword" required>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="adminEmail" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" id="adminPassword" required>
+                </div>
+                <button type="submit" class="btn btn-dark w-100">Login</button>
+            </form>
+            <div class="text-center mt-3">
+                <small class="text-muted">Protected area - Authorized access only</small>
             </div>
-            <button type="submit" class="btn btn-dark w-100">Login</button>
-        </form>
-        <div class="text-center mt-3">
-            <small class="text-muted">Protected area - Authorized access only</small>
         </div>
     </div>
-</div>
 
-<!-- Dashboard Section (hidden by default, shown after login) -->
-<div id="dashboardSection" style="display: none;">
-    <div class="dashboard-header">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <img src="logo_white.webp" alt="MONARK" style="height: 35px;">
-                    <span class="ms-2 fw-semibold">Admin Dashboard</span>
+    <!-- Dashboard Section (hidden by default, shown after login) -->
+    <div id="dashboardSection" style="display: none;">
+        <div class="dashboard-header">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <img src="logo_white.webp" alt="MONARK" style="height: 35px;">
+                        <span class="ms-2 fw-semibold">Admin Dashboard</span>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <span id="adminEmailDisplay" class="me-3 text-muted"></span>
+                        <button class="btn btn-sm btn-outline-danger" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
                 </div>
-                <div class="col-md-6 text-end">
-                    <span id="adminEmailDisplay" class="me-3 text-muted"></span>
-                    <button class="btn btn-sm btn-outline-danger" id="logoutBtn">
-                        <i class="fas fa-sign-out-alt"></i> Logout
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" id="dashboardTabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-tab="products" href="#">
+                        <i class="fas fa-box me-2"></i>Products
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-tab="add" href="#">
+                        <i class="fas fa-plus me-2"></i>Add Product
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Products Tab -->
+            <div id="productsTab" class="dashboard-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="mb-0"><i class="fas fa-database me-2"></i>All Products</h5>
+                    <button class="btn btn-sm btn-success" id="refreshProductsBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh
                     </button>
                 </div>
+                <div id="productsList" class="product-table">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-warning"></div>
+                        <p class="mt-3">Loading products...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Product Tab -->
+            <div id="addTab" style="display: none;">
+                <div class="dashboard-card">
+                    <h5 class="mb-4"><i class="fas fa-plus-circle me-2"></i>Add New Product</h5>
+                    <form id="addProductForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Product Name *</label>
+                                <input type="text" class="form-control" id="prodName" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Price *</label>
+                                <input type="number" class="form-control" id="prodPrice" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Old Price (optional)</label>
+                                <input type="number" class="form-control" id="prodOldPrice">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Category *</label>
+                                <select class="form-select" id="prodCategory" required>
+                                    <option value="tops">TOPS</option>
+                                    <option value="bottoms">BOTTOMS</option>
+                                    <option value="formalwear">FORMAL WEAR</option>
+                                    <option value="easywear">EASY WEAR</option>
+                                    <option value="accessories">ACCESSORIES</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3" id="subcategoryContainer">
+                                <label class="form-label">Subcategory *</label>
+                                <select class="form-select" id="prodSubcategory">
+                                    <option value="">Select subcategory</option>
+                                    <option value="bags">Bags</option>
+                                    <option value="socks">Socks</option>
+                                    <option value="glasses">Glasses</option>
+                                    <option value="ties">Ties</option>
+                                    <option value="wallets">Wallets</option>
+                                    <option value="belts">Belts</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Image URL *</label>
+                                <input type="url" class="form-control" id="prodImageUrl" placeholder="https://..."
+                                    required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Sizes (comma separated)</label>
+                                <input type="text" class="form-control" id="prodSizes" placeholder="S, M, L, XL">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" id="prodDescription" rows="3"></textarea>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="prodSale">
+                                    <label class="form-check-label">On Sale?</label>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-dark">
+                                    <i class="fas fa-save me-2"></i> Add Product
+                                </button>
+                                <button type="reset" class="btn btn-secondary ms-2">Clear</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="container">
-        <!-- Tabs -->
-        <ul class="nav nav-tabs" id="dashboardTabs">
-            <li class="nav-item">
-                <a class="nav-link active" data-tab="products" href="#">
-                    <i class="fas fa-box me-2"></i>Products
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-tab="add" href="#">
-                    <i class="fas fa-plus me-2"></i>Add Product
-                </a>
-            </li>
-        </ul>
-
-        <!-- Products Tab -->
-        <div id="productsTab" class="dashboard-card">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="mb-0"><i class="fas fa-database me-2"></i>All Products</h5>
-                <button class="btn btn-sm btn-success" id="refreshProductsBtn">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </button>
-            </div>
-            <div id="productsList" class="product-table">
-                <div class="text-center py-5">
-                    <div class="spinner-border text-warning"></div>
-                    <p class="mt-3">Loading products...</p>
+    <!-- Edit Product Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-            </div>
-        </div>
-
-        <!-- Add Product Tab -->
-        <div id="addTab" style="display: none;">
-            <div class="dashboard-card">
-                <h5 class="mb-4"><i class="fas fa-plus-circle me-2"></i>Add New Product</h5>
-                <form id="addProductForm">
+                <div class="modal-body">
+                    <input type="hidden" id="editProductId">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Product Name *</label>
-                            <input type="text" class="form-control" id="prodName" required>
+                            <label class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="editName">
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label class="form-label">Price *</label>
-                            <input type="number" class="form-control" id="prodPrice" required>
+                            <label class="form-label">Price</label>
+                            <input type="number" class="form-control" id="editPrice">
                         </div>
                         <div class="col-md-3 mb-3">
-                            <label class="form-label">Old Price (optional)</label>
-                            <input type="number" class="form-control" id="prodOldPrice">
+                            <label class="form-label">Old Price</label>
+                            <input type="number" class="form-control" id="editOldPrice">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Category *</label>
-                            <select class="form-select" id="prodCategory" required>
+                            <label class="form-label">Category</label>
+                            <select class="form-select" id="editCategory">
                                 <option value="tops">TOPS</option>
                                 <option value="bottoms">BOTTOMS</option>
                                 <option value="formalwear">FORMAL WEAR</option>
@@ -190,9 +284,9 @@
                                 <option value="accessories">ACCESSORIES</option>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3" id="subcategoryContainer" style="display: none;">
-                            <label class="form-label">Subcategory *</label>
-                            <select class="form-select" id="prodSubcategory">
+                        <div class="col-md-6 mb-3" id="editSubcategoryContainer" style="display: none;">
+                            <label class="form-label">Subcategory</label>
+                            <select class="form-select" id="editSubcategory">
                                 <option value="">Select subcategory</option>
                                 <option value="bags">Bags</option>
                                 <option value="socks">Socks</option>
@@ -203,114 +297,39 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Image URL *</label>
-                            <input type="url" class="form-control" id="prodImageUrl" placeholder="https://..." required>
+                            <label class="form-label">Image URL</label>
+                            <input type="url" class="form-control" id="editImageUrl">
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label class="form-label">Sizes (comma separated)</label>
-                            <input type="text" class="form-control" id="prodSizes" placeholder="S, M, L, XL">
+                            <label class="form-label">Sizes</label>
+                            <input type="text" class="form-control" id="editSizes" placeholder="S, M, L, XL">
                         </div>
                         <div class="col-md-12 mb-3">
                             <label class="form-label">Description</label>
-                            <textarea class="form-control" id="prodDescription" rows="3"></textarea>
+                            <textarea class="form-control" id="editDescription" rows="3"></textarea>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="prodSale">
+                                <input class="form-check-input" type="checkbox" id="editSale">
                                 <label class="form-check-label">On Sale?</label>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <button type="submit" class="btn btn-dark">
-                                <i class="fas fa-save me-2"></i> Add Product
-                            </button>
-                            <button type="reset" class="btn btn-secondary ms-2">Clear</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Edit Product Modal -->
-<div class="modal fade" id="editModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="editProductId">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Product Name</label>
-                        <input type="text" class="form-control" id="editName">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Price</label>
-                        <input type="number" class="form-control" id="editPrice">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="form-label">Old Price</label>
-                        <input type="number" class="form-control" id="editOldPrice">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Category</label>
-                        <select class="form-select" id="editCategory">
-                            <option value="tops">TOPS</option>
-                            <option value="bottoms">BOTTOMS</option>
-                            <option value="formalwear">FORMAL WEAR</option>
-                            <option value="easywear">EASY WEAR</option>
-                            <option value="accessories">ACCESSORIES</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3" id="editSubcategoryContainer" style="display: none;">
-                        <label class="form-label">Subcategory</label>
-                        <select class="form-select" id="editSubcategory">
-                            <option value="">Select subcategory</option>
-                            <option value="bags">Bags</option>
-                            <option value="socks">Socks</option>
-                            <option value="glasses">Glasses</option>
-                            <option value="ties">Ties</option>
-                            <option value="wallets">Wallets</option>
-                            <option value="belts">Belts</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Image URL</label>
-                        <input type="url" class="form-control" id="editImageUrl">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Sizes</label>
-                        <input type="text" class="form-control" id="editSizes" placeholder="S, M, L, XL">
-                    </div>
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Description</label>
-                        <textarea class="form-control" id="editDescription" rows="3"></textarea>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="editSale">
-                            <label class="form-check-label">On Sale?</label>
-                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-dark" id="saveEditBtn">Save Changes</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-dark" id="saveEditBtn">Save Changes</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="js/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="js/dashboard.js"></script>
 
 </body>
+
 </html>
