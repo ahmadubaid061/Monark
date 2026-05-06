@@ -195,13 +195,7 @@ firebase deploy --only firestore:rules
 
 ## 📞 Contact
 
-**Live Site:** https://monark-ecommerce.web.app
-
----
-
-## 📄 License
-
-MIT
+**Email**: ahmadubaidedu@mail.com
 
 ---
 
